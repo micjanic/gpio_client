@@ -1,25 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
+import { useQuery } from "react-query";
+import "./App.css";
+
+const fetchPins = async () => {
+  const response = await fetch("http://192.168.1.225/gpio_api/pins/");
+  const data = await response.json();
+  return data;
+};
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const { data, isLoading, error } = useQuery("getAll", fetchPins);
+  console.log(data, isLoading, error);
+
+  return isLoading ? <></> : <div className="App">{data[0].pin_num}</div>;
 }
 
 export default App;
